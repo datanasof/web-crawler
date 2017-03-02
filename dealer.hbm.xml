@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="Dealer" table="dealer">
+      <meta attribute="class-description">
+         This class contains the Dealer detail. 
+      </meta>
+      <id name="dealerID" type="int" column="dealerID">
+         <generator class="native"/>
+      </id>
+      <property name="dealerName" column="dealerName" type="string"/>
+      <property name="pvmonthly" column="pvmonthly" type="int"/>
+      <property name="pvyearly" column="pvyearly" type="int"/>      
+   </class>
+</hibernate-mapping>
