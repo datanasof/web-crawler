@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import db.DBbuilder;
+import db.DBdata;
 import db.Product;
 
 public class ManageProduct {
@@ -18,7 +19,7 @@ public class ManageProduct {
 	   DBbuilder.start();
 	   
       try{
-    	  Configuration  configuration = new Configuration().configure( "C:\\Users\\daatanasov\\Documents\\GitHub\\web-crawler\\resourceshibernate.cfg.xml");
+    	  Configuration  configuration = new Configuration().configure("hibernate.cfg.xml");
          factory = new Configuration().configure().buildSessionFactory();
       }catch (Throwable ex) { 
          System.err.println("Failed to create sessionFactory object." + ex);
@@ -67,11 +68,11 @@ public class ManageProduct {
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         List products = session.createQuery("FROM product").list(); 
+         List products = session.createQuery("FROM Product").list(); 
          for (Iterator iterator = 
                            products.iterator(); iterator.hasNext();){
             Product product = (Product) iterator.next(); 
-            System.out.print("Product Name: " + product.getProductName());             
+            System.out.println("Product Name: " + product.getProductName());             
          }
          tx.commit();
       }catch (HibernateException e) {

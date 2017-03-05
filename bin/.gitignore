@@ -1,3 +1,4 @@
-/db/
 /dbManager/
 /hibernate.cfg.xml
+/product.hbm.xml
+/db/

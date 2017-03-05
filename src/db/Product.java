@@ -1,7 +1,7 @@
 package db;
 
 public class Product {
-	private int id;
+	private int productID;
 	private String productName;
 	
 	public Product() {}
@@ -9,11 +9,11 @@ public class Product {
 		super();
 		this.productName = productName;
 	}
-	public int getId() {
-		return id;
+	public int getProductID() {
+		return productID;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setProductID(int id) {
+		this.productID = id;
 	}
 	public String getProductName() {
 		return productName;

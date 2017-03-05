@@ -5,6 +5,6 @@ public class DBdata {
 	static final String USER = "root";
 	static final String PASS = "160983St";
 	static final String SQL = "resources/webcrawler.sql";
-	
+	public static final String HIBERNATECONFIG = "resources/hibernate.cfg.xml";
 }
 

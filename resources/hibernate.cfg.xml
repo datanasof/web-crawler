@@ -13,7 +13,7 @@
 
    <!-- Assume test is the database name -->
    <property name="hibernate.connection.url">
-      jdbc:mysql://localhost/test
+      jdbc:mysql://localhost/webcrawlerdb
    </property>
    <property name="hibernate.connection.username">
       root
