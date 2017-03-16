@@ -24,6 +24,8 @@
 
    <!-- List of XML mapping files -->
    <mapping resource="product.hbm.xml"/>
+<mapping resource="dealer.hbm.xml"/>
+<mapping resource="pricelist.hbm.xml"/>
 
 </session-factory>
 </hibernate-configuration>

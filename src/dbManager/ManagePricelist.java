@@ -10,9 +10,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import db.DBbuilder;
-import db.Product;
+import db.Pricelist;
 
-public class ManageProduct {
+public class ManagePricelist {
    private static SessionFactory factory; 
    public static void main(String[] args) {
 	   DBbuilder.start();
@@ -24,34 +24,34 @@ public class ManageProduct {
          System.err.println("Failed to create sessionFactory object." + ex);
          throw new ExceptionInInitializerError(ex); 
       }
-      ManageProduct ME = new ManageProduct();
+      ManagePricelist ME = new ManagePricelist();
 
-      /* Add few employee records in database */
-      Integer prodID1 = ME.addProduct("Orion Studio");
-      Integer prodID2 = ME.addProduct("Zen Tour");
-      Integer prodID3 = ME.addProduct("Goliath");
+      /* Add few price records in database */
+      Integer productPriceID1 = ME.addProductPrice(1,2590,"EUR");
+      Integer productPriceID2 = ME.addProductPrice(2,1890,"EUR");
+      Integer productPriceID3 = ME.addProductPrice(3,4550,"EUR");
 
-      /* List down all the employees */
-      ME.listProducts();
+      /* List down all the prices */
+      ME.listProductPrices();
 
-      /* Update employee's records */
-      ME.updateProduct(prodID1, "OCX HD");
+      /* Update product's price */
+      ME.updateProductPrice(productPriceID1,2699,"USD");
 
-      /* Delete a product from the database */
-      ME.deleteProduct(prodID2);
+      /* Delete a productPrice from the database */
+      ME.deleteProductPrice(productPriceID3);
 
-      /* List down new list of the employees */
-      ME.listProducts();
+      /* List down new list of the product prices */
+      ME.listProductPrices();
    }
-   /* Method to CREATE a product in the database */
-   public Integer addProduct(String name){
+   /* Method to CREATE a product price in the database */
+   public Integer addProductPrice(int productID, int price, String currency){
       Session session = factory.openSession();
       Transaction tx = null;
-      Integer productID = null;
+      Integer productPriceID = null;
       try{
          tx = session.beginTransaction();
-         Product product = new Product(name);
-         productID = (Integer) session.save(product); 
+         Pricelist pricelist = new Pricelist(productID,price,currency);
+         productPriceID = (Integer) session.save(pricelist); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -59,19 +59,19 @@ public class ManageProduct {
       }finally {
          session.close(); 
       }
-      return productID;
+      return productPriceID;
    }
-   /* Method to  READ all the employees */
-   public void listProducts( ){
+   /* Method to  READ all the dealers */
+   public void listProductPrices( ){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         List products = session.createQuery("FROM Product").list(); 
+         List productPrices = session.createQuery("FROM Pricelist").list(); 
          for (Iterator iterator = 
-                           products.iterator(); iterator.hasNext();){
-            Product product = (Product) iterator.next(); 
-            System.out.println("Product Name: " + product.getProductName());             
+                           productPrices.iterator(); iterator.hasNext();){
+            Pricelist pricelist = (Pricelist) iterator.next(); 
+            System.out.println("Product: " + pricelist.getProductID() + ", price =  " + pricelist.getPrice() + " " + pricelist.getCurrency());             
          }
          tx.commit();
       }catch (HibernateException e) {
@@ -81,15 +81,16 @@ public class ManageProduct {
          session.close(); 
       }
    }
-   /* Method to UPDATE Name for a product */
-   public void updateProduct(Integer ProductID, String name ){
+   /* Method to UPDATE product price */
+   public void updateProductPrice(Integer productPriceID, int price, String currency){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         Product product = (Product) session.get(Product.class, ProductID); 
-         product.setProductName(name);
-		 session.update(product); 
+         Pricelist pricelist = (Pricelist) session.get(Pricelist.class, productPriceID); 
+         pricelist.setPrice(price);
+         pricelist.setCurrency(currency);
+		 session.update(pricelist); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -98,14 +99,14 @@ public class ManageProduct {
          session.close(); 
       }
    }
-   /* Method to DELETE a product from the records */
-   public void deleteProduct(Integer ProductID){
+   /* Method to DELETE a product price from the records */
+   public void deleteProductPrice(Integer productPriceID){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         Product product = (Product)session.get(Product.class, ProductID); 
-         session.delete(product); 
+         Pricelist pricelist = (Pricelist)session.get(Pricelist.class, productPriceID); 
+         session.delete(pricelist); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -115,3 +116,4 @@ public class ManageProduct {
       }
    }
 }
+

@@ -10,9 +10,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import db.DBbuilder;
-import db.Product;
+import db.DBdata;
+import db.Dealer;
 
-public class ManageProduct {
+public class ManageDealer {
    private static SessionFactory factory; 
    public static void main(String[] args) {
 	   DBbuilder.start();
@@ -24,34 +25,34 @@ public class ManageProduct {
          System.err.println("Failed to create sessionFactory object." + ex);
          throw new ExceptionInInitializerError(ex); 
       }
-      ManageProduct ME = new ManageProduct();
+      ManageDealer ME = new ManageDealer();
 
-      /* Add few employee records in database */
-      Integer prodID1 = ME.addProduct("Orion Studio");
-      Integer prodID2 = ME.addProduct("Zen Tour");
-      Integer prodID3 = ME.addProduct("Goliath");
+      /* Add few dealer records in database */
+      Integer dealerID1 = ME.addDealer("Thomann",0,0);
+      Integer dealerID2 = ME.addDealer("BAX",0,0);
+      Integer dealerID3 = ME.addDealer("DAS",0,0);
 
-      /* List down all the employees */
-      ME.listProducts();
+      /* List down all the dealers */
+      ME.listDealers();
 
-      /* Update employee's records */
-      ME.updateProduct(prodID1, "OCX HD");
+      /* Update dealer's records */
+      ME.updateDealer(dealerID1,0,0);
 
-      /* Delete a product from the database */
-      ME.deleteProduct(prodID2);
+      /* Delete a dealer from the database */
+      ME.deleteDealer(dealerID2);
 
-      /* List down new list of the employees */
-      ME.listProducts();
+      /* List down new list of the dealers */
+      ME.listDealers();
    }
    /* Method to CREATE a product in the database */
-   public Integer addProduct(String name){
+   public Integer addDealer(String name, int pvmonthly, int pvyearly){
       Session session = factory.openSession();
       Transaction tx = null;
       Integer productID = null;
       try{
          tx = session.beginTransaction();
-         Product product = new Product(name);
-         productID = (Integer) session.save(product); 
+         Dealer dealer = new Dealer(name,pvmonthly,pvyearly);
+         productID = (Integer) session.save(dealer); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -61,17 +62,17 @@ public class ManageProduct {
       }
       return productID;
    }
-   /* Method to  READ all the employees */
-   public void listProducts( ){
+   /* Method to  READ all the dealers */
+   public void listDealers( ){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         List products = session.createQuery("FROM Product").list(); 
+         List products = session.createQuery("FROM Dealer").list(); 
          for (Iterator iterator = 
                            products.iterator(); iterator.hasNext();){
-            Product product = (Product) iterator.next(); 
-            System.out.println("Product Name: " + product.getProductName());             
+            Dealer dealer = (Dealer) iterator.next(); 
+            System.out.println("Dealer Name: " + dealer.getDealerName());             
          }
          tx.commit();
       }catch (HibernateException e) {
@@ -81,15 +82,16 @@ public class ManageProduct {
          session.close(); 
       }
    }
-   /* Method to UPDATE Name for a product */
-   public void updateProduct(Integer ProductID, String name ){
+   /* Method to UPDATE points for a dealer */
+   public void updateDealer(Integer DealerID, int pvmonthly, int pvyearly){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         Product product = (Product) session.get(Product.class, ProductID); 
-         product.setProductName(name);
-		 session.update(product); 
+         Dealer dealer = (Dealer) session.get(Dealer.class, DealerID); 
+         dealer.setPvmonthly(pvmonthly);
+         dealer.setPvyearly(pvyearly);
+		 session.update(dealer); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -98,14 +100,14 @@ public class ManageProduct {
          session.close(); 
       }
    }
-   /* Method to DELETE a product from the records */
-   public void deleteProduct(Integer ProductID){
+   /* Method to DELETE a dealer from the records */
+   public void deleteDealer(Integer DealerID){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         Product product = (Product)session.get(Product.class, ProductID); 
-         session.delete(product); 
+         Dealer dealer = (Dealer)session.get(Dealer.class, DealerID); 
+         session.delete(dealer); 
          tx.commit();
       }catch (HibernateException e) {
          if (tx!=null) tx.rollback();
@@ -115,3 +117,4 @@ public class ManageProduct {
       }
    }
 }
+
